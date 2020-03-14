@@ -18,7 +18,7 @@ public class MyFirstTest {
     @Before
     public void start() {
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, 10);
+        wait = new WebDriverWait(driver, 30);
     }
 
     @Test
