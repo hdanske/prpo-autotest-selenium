@@ -1,26 +1,38 @@
 package files;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class LoginPage {
     private WebDriver driver;
+    public static String LOGIN_URL = "https://prpo-test.intervale.ru/console/";
+    public static String USERNAME = "username";
+    public static String PASSWORD = "password";
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
     }
 
+    public LoginPage goTo(String url) {
+        driver.get(url);
+        return this;
+    }
+
     //    @FindBy(id = "username")
 //    private WebElement usernameField;
-    private By usernameField = By.id("username");
+    private By usernameField = By.id(USERNAME);
 
     //    @FindBy(id = "password")
 //    private WebElement passwordField;
-    private By passwordField = By.id("password");
+    private By passwordField = By.id(PASSWORD);
 
     //    @FindBy(tagName = "button")
 //    private WebElement loginButton;
     private By loginButton = By.tagName("button");
+
+
 
 //    @FindBy(xpath = "//*[@id=\"ui-panel-4-content\"]/div/p-messages/div/ul/li/span[1]")
 //    private WebElement errorSummary;
@@ -53,6 +65,20 @@ public class LoginPage {
 
     public void clickLogin(){
         driver.findElement(loginButton).click();
+    }
+
+    public void checkMessage(String login_failed) {
+        WebElement error = driver.findElement(By.xpath("//span[text()=\"" + login_failed + "\"]"));
+        Assert.assertTrue(error.isDisplayed());
+    }
+
+    public void clearField(String field){
+        WebElement element = driver.findElement(By.id(field));
+        element.clear();
+    }
+
+    public void clickCloseErrorWindow() {
+        driver.findElement(By.cssSelector("a[class=ui-messages-close]"));
     }
 
 //    public void clickLogin(){

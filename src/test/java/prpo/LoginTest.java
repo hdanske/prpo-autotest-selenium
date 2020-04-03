@@ -1,4 +1,5 @@
 package prpo;
+import files.LoginPage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,11 +11,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
+import static files.LoginPage.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
 public class LoginTest {
     private WebDriver driver;
     private WebDriverWait wait;
+    private LoginPage loginPage;
 
     @Before
     public void start() {
@@ -22,23 +25,35 @@ public class LoginTest {
         wait = new WebDriverWait(driver, 40);
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         driver.manage().window().maximize();
+        loginPage = new LoginPage(driver);
     }
 
     @Test
-    public void login() {
-        driver.get("https://prpo-test.intervale.ru/console/");
+    public void unSuccessLogin() {
 
-        driver.findElement(By.id("username")).sendKeys("admin");
-        driver.findElement(By.id("password")).sendKeys("admin0011");
-        driver.findElement(By.tagName("button")).click();
-        wait.until(urlToBe("https://prpo-test.intervale.ru/console/import-charges-trx"));
-        String URL = driver.getCurrentUrl();
-        Assert.assertEquals(URL,"https://prpo-test.intervale.ru/console/import-charges-trx");
+        loginPage.goTo(LOGIN_URL);
+        loginPage.typeUsername("admin");
+        loginPage.typePassword("ad");
+        loginPage.clickLogin();
+        loginPage.checkMessage("Login failed");
+        loginPage.checkMessage("Неправильные логин или пароль");
+
+        loginPage.clickCloseErrorWindow();
+        loginPage.clearField(USERNAME);
+        loginPage.checkMessage("Данное поле обязательно");
+        loginPage.clearField(PASSWORD);
+
+
+//        wait.until(urlToBe("https://prpo-test.intervale.ru/console/import-charges-trx"));
+//        String URL = driver.getCurrentUrl();
+//        Assert.assertEquals(URL,"https://prpo-test.intervale.ru/console/import-charges-trx");
     }
 
-    @After
-    public void stop() {
-        driver.quit();
-        driver = null;
-    }
+
+
+//    @After
+//    public void stop() {
+//        driver.quit();
+//        driver = null;
+//    }
 }
