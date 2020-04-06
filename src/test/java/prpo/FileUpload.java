@@ -2,7 +2,9 @@ package prpo;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -11,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
-public class CspCreate {
+public class FileUpload {
     private WebDriver driver;
     private WebDriverWait wait;
 
@@ -34,44 +36,65 @@ public class CspCreate {
 
         driver.getCurrentUrl();
         List<WebElement> element = driver.findElements(By.cssSelector("a.tabmenuitem-link"));
-        WebElement button = element.get(6);
+        WebElement button = element.get(2);
         button.click();
 
-        WebElement cspButton = driver.findElement(By.xpath("//*[text() = 'Поставщики коммерческих услуг']"));
-        cspButton.click();
+        WebElement importCharge = driver.findElement(By.xpath("//*[text() = 'Импорт начислений']"));
+        importCharge.click();
 
-        driver.findElement(By.xpath("//*[text() = 'Добавить']")).click();
+       // wait.until(urlToBe("https://prpo-test.intervale.ru/console/import-charges"));
 
-        //driver.findElement(By.xpath(""));
+        WebElement upload = driver.findElement(By.xpath("//*[text() = 'Загрузить начисления']"));
+        upload.click();
 
-        WebElement dropDownCspType = driver.findElement(By.cssSelector("p-dropdown[formcontrolname='cspType']"));
-        dropDownCspType.click();
-
-        WebElement cspType = driver.findElement(By.cssSelector("li[aria-label='Индивидуальный предприниматель']"));
-        cspType.click();
-
-        WebElement regionButton = driver.findElement(By.cssSelector("p-autocomplete[formcontrolname='region'] button"));
+        WebElement regionButton = driver.findElement(By.cssSelector("#import-charges-form button"));
         regionButton.click();
 
-        WebElement region = driver.findElement(By.xpath("//li[@role='option']//span[text()='Санкт - Петербург']"));
-        region.click();
+        WebElement csp = driver.findElement(By.xpath("//li[@role='option']//span[text()='yprokopenko_test']"));
+        csp.click();
 
-        WebElement dropDownService = driver.findElement(By.cssSelector("p-dropdown[formcontrolname='servicesSector']"));
-        dropDownService.click();
+        WebElement chooseFile = driver.findElement(By.cssSelector("input[type='file']"));
+        System.out.println(chooseFile.isEnabled());
 
-        WebElement serviceType = driver.findElement(By.cssSelector("li[aria-label='Электроэнергия']"));
-        serviceType.click();
+//        chooseFile.sendKeys("src/test/resources/testupload_with_title_positive.csv");
+        chooseFile.sendKeys("D:\\testing files\\upload\\testupload_with_title_positive.csv");
 
-        driver.findElement(By.id("fullName")).sendKeys("ОАО Селениум");
-        driver.findElement(By.id("workPhone")).sendKeys("+37529990099");
-        driver.findElement(By.id("email")).sendKeys("selenium@gmail.com");
-        driver.findElement(By.id("inn")).sendKeys("123456789012");
-        driver.findElement(By.id("kpp")).sendKeys("123");
-        driver.findElement(By.id("ogrnip")).sendKeys("123456789012345");
-        driver.findElement(By.id("okved")).sendKeys("123");
-        driver.findElement(By.id("okpo")).sendKeys("123");
-        driver.findElement(By.id("okato")).sendKeys("123");
+        WebElement send = driver.findElement(By.xpath("//button//span[text()='Загрузить']"));
+        send.click();
 
+//
+//        driver.findElement(By.xpath("//*[text() = 'Добавить']")).click();
+//
+//        driver.findElement(By.xpath(""));
+//
+//        WebElement dropDownCspType = driver.findElement(By.cssSelector("p-dropdown[formcontrolname='cspType']"));
+//        dropDownCspType.click();
+//
+//        WebElement cspType = driver.findElement(By.cssSelector("li[aria-label='Индивидуальный предприниматель']"));
+//        cspType.click();
+//
+//        WebElement regionButton = driver.findElement(By.cssSelector("p-autocomplete[formcontrolname='region'] button"));
+//        regionButton.click();
+//
+//        WebElement region = driver.findElement(By.xpath("//li[@role='option']//span[text()='Санкт - Петербург']"));
+//        region.click();
+//
+//        WebElement dropDownService = driver.findElement(By.cssSelector("p-dropdown[formcontrolname='servicesSector']"));
+//        dropDownService.click();
+//
+//        WebElement serviceType = driver.findElement(By.cssSelector("li[aria-label='Электроэнергия']"));
+//        serviceType.click();
+//
+//        driver.findElement(By.id("fullName")).sendKeys("ОАО Селениум");
+//        driver.findElement(By.id("workPhone")).sendKeys("+37529990099");
+//        driver.findElement(By.id("email")).sendKeys("selenium@gmail.com");
+//        driver.findElement(By.id("inn")).sendKeys("123456789012");
+//        driver.findElement(By.id("kpp")).sendKeys("123");
+//        driver.findElement(By.id("ogrnip")).sendKeys("123456789012345");
+//        driver.findElement(By.id("okved")).sendKeys("123");
+//        driver.findElement(By.id("okpo")).sendKeys("123");
+//        driver.findElement(By.id("okato")).sendKeys("123");
+//
 
         /* Работает кусок
         driver.findElement(By.id("ui-tabpanel-1-label")).click();
@@ -121,10 +144,4 @@ public class CspCreate {
 */
 
     }
-
-//    @After
-//    public void stop() {
-//        driver.quit();
-//        driver = null;
-//    }
 }
