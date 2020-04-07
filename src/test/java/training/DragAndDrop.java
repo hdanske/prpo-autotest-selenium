@@ -1,4 +1,4 @@
-package prpo;
+package training;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import prpo.InitTest;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -14,25 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-public class DragAndDrop {
-    private WebDriver driver;
-    private WebDriverWait wait;
-
-    @Before
-    public void start() {
-//        System.setProperty("webdriver.firefox.driver", "c:\\selenium\\geckodriver.exe");
-        driver = new ChromeDriver();
-//        driver = new FirefoxDriver();
-        wait = new WebDriverWait(driver, 40);
-        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-    }
-
+public class DragAndDrop extends InitTest {
     @Test
     public void dragAndDrop() throws AWTException, InterruptedException, IOException {
         driver.get("http://www.seleniumeasy.com/test/drag-and-drop-demo.html");

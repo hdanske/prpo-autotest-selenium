@@ -1,15 +1,20 @@
 package files;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class LoginPage {
     private WebDriver driver;
     public static String LOGIN_URL = "https://prpo-test.intervale.ru/console/";
     public static String USERNAME = "username";
     public static String PASSWORD = "password";
+    public static String LOGINBUTTON = "button";
+
+    private By alertCloseButton = By.xpath("//p-messages//a");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -33,7 +38,6 @@ public class LoginPage {
     private By loginButton = By.tagName("button");
 
 
-
 //    @FindBy(xpath = "//*[@id=\"ui-panel-4-content\"]/div/p-messages/div/ul/li/span[1]")
 //    private WebElement errorSummary;
 //
@@ -43,7 +47,7 @@ public class LoginPage {
 //    @FindBy(className = "pi pi-times")
 //    private WebElement iconClose;
 
-    public LoginPage typeUsername(String username){
+    public LoginPage typeUsername(String username) {
         driver.findElement(usernameField).sendKeys(username);
         return this;
     }
@@ -53,7 +57,7 @@ public class LoginPage {
 //        return this;
 //    }
 
-    public LoginPage typePassword(String password){
+    public LoginPage typePassword(String password) {
         driver.findElement(passwordField).sendKeys(password);
         return this;
     }
@@ -63,28 +67,48 @@ public class LoginPage {
 //        return this;
 //    }
 
-    public void clickLogin(){
+    public void clickLogin() {
         driver.findElement(loginButton).click();
     }
 
-    public void checkMessage(String login_failed) {
-        WebElement error = driver.findElement(By.xpath("//span[text()=\"" + login_failed + "\"]"));
-        Assert.assertTrue(error.isDisplayed());
+    public WebElement getloginButton() {
+        return driver.findElement(loginButton);
     }
 
-    public void clearField(String field){
+    public void closeAlert() {
+        driver.findElement(alertCloseButton).click();
+    }
+
+    public WebElement checkMessage(String login_failed) {
+        WebElement error = driver.findElement(By.xpath("//span[text()=\"" + login_failed + "\"]"));
+        return error;
+    }
+
+    public void clearField(String field) {
         WebElement element = driver.findElement(By.id(field));
-        element.clear();
+
+        String text = element.getAttribute("value");
+
+        int n = text.length();
+
+        while (n > 0) {
+            element.sendKeys(Keys.BACK_SPACE);
+            n --;
+        }
     }
 
     public void clickCloseErrorWindow() {
         driver.findElement(By.cssSelector("a[class=ui-messages-close]"));
     }
 
+    public List<WebElement> checkHints(String hint) {
+        List<WebElement> messages = driver.findElements(By.xpath("//span[text()='" + hint + "']"));
+        return messages;
+    }
+
 //    public void clickLogin(){
 //        loginButton.submit();
 //    }
-
 
 
 //    public files.LoginPage loginWithIncorrectCred(String username, String password){
