@@ -1,48 +1,52 @@
 package prpo;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static files.ImportChargeTrxPage.IMPORT_CHARGE_TRX;
+import static files.LoginPage.LOGIN_URL;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
 public class FileDownload extends InitTest {
 
     @Test
-    public void cspCreate() {
-        driver.get("https://prpo-test.intervale.ru/console/");
+    public void downloadPaymentFile() {
+        loginPage.goTo(LOGIN_URL);
+        loginPage.typeUsername("admin");
+        loginPage.typePassword("admin0011");
+        loginPage.clickLogin();
 
-        driver.findElement(By.id("username")).sendKeys("admin");
-        driver.findElement(By.id("password")).sendKeys("admin0011");
-        driver.findElement(By.tagName("button")).click();
-        wait.until(urlToBe("https://prpo-test.intervale.ru/console/import-charges-trx"));
+        wait.until(urlToBe(IMPORT_CHARGE_TRX));
 
-        driver.getCurrentUrl();
-        List<WebElement> element = driver.findElements(By.cssSelector("a.tabmenuitem-link"));
-        WebElement button = element.get(3);
-        button.click();
+        sideBar.paymentsButtonClick();
+        sideBar.exportPaymentsButtonClick();
 
-        WebElement download = driver.findElement(By.xpath("//*[text() = 'Экспорт платежей']"));
-        download.click();
+        exportPaymentsPage.pause(1);
+        String trxId = exportPaymentsPage.getExportPaymentsTable().getValueFromCell(1,  3);
+        System.out.println(trxId);
 
-        WebElement downloadButton = driver.findElement(By.xpath("//*[text() = 'Скачать файл платежей']"));
-        downloadButton.click();
+        exportPaymentsPage.downloadFileButtonClick();
 
-        WebElement drop = driver.findElement(By.cssSelector("#export-payments-form p-dropdown"));
-        drop.click();
+        exportPaymentForm.choosePeriod("Последний час");
+        exportPaymentForm.chooseTypeFile("CSV");
+        exportPaymentForm.chooseCSPButtonClick();
+        exportPaymentForm.chooseCSP("yprokopenko_test");
+        exportPaymentForm.downloadClick();
+//------------------------Проверка на выгрузку файла-------------------//
 
-        WebElement lastHour = driver.findElement(By.xpath("//li[@role='option']//span[text()='Последний час']"));
-        lastHour.click();
+        exportPaymentsPage.pause(2);
 
-        WebElement webEl = driver.findElement(By.cssSelector("app-csp-select-control[formcontrolname='csp'] button"));
-        webEl.click();
+        Assert.assertFalse(exportPaymentsPage.getExportPaymentsTable().getValueFromCell(1, 3).equals(trxId));
+        //Assert.assertTrue(exportPaymentsPage.getExportPaymentsTable().getValueFromCell(1, 6).equals("Не завершена"));
+        Assert.assertTrue(exportPaymentsPage.getExportPaymentsTable().getValueFromCell(1,2).equals("yprokopenko_test"));
 
-        WebElement csp = driver.findElement(By.xpath("//li[@role='option']//span[text()='yprokopenko_test']"));
-        csp.click();
+        exportPaymentsPage.refreshTable();
 
-        WebElement dwn = driver.findElement(By.cssSelector("button[label='Скачать']"));
-        dwn.click();
+        exportPaymentsPage.pause(1);
+        Assert.assertTrue(exportPaymentsPage.getExportPaymentsTable().getValueFromCell(1,6).equals("Успешно"));
     }
 }

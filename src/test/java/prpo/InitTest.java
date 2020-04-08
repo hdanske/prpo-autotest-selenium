@@ -1,8 +1,6 @@
 package prpo;
 
-import files.CspPage;
-import files.LoginPage;
-import files.SideBar;
+import files.*;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.JavascriptExecutor;
@@ -19,6 +17,11 @@ public class InitTest {
     public static JavascriptExecutor js;
     public static SideBar sideBar;
     public static CspPage cspPage;
+    public static CspAddForm cspAddForm;
+    public static ImportChargeTrxPage importChargeTrxPage;
+    public static ImportChargeForm importChargeForm;
+    public static ExportPaymentsPage exportPaymentsPage;
+    public static ExportPaymentForm exportPaymentForm;
 
     @Before
     public void start() {
@@ -33,6 +36,12 @@ public class InitTest {
         loginPage = new LoginPage(driver);
         sideBar = new SideBar(driver);
         cspPage = new CspPage(driver);
+        cspAddForm = new CspAddForm(driver);
+        importChargeTrxPage = new ImportChargeTrxPage(driver);
+        importChargeForm = new ImportChargeForm(driver);
+        exportPaymentsPage = new ExportPaymentsPage(driver);
+        exportPaymentForm = new ExportPaymentForm(driver);
+
         js = (JavascriptExecutor) driver;
 
         Runtime.getRuntime().addShutdownHook(

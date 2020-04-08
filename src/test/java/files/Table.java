@@ -14,6 +14,22 @@ public class Table {
     private WebElement tableHeaderElement;
     private WebDriver driver;
 
+    public void setTableElement(WebElement tableElement) {
+        this.tableElement = tableElement;
+    }
+
+    public void setTableHeaderElement(WebElement tableHeaderElement) {
+        this.tableHeaderElement = tableHeaderElement;
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public Table(){
+
+    }
+
     public Table(WebElement tableElement, WebElement tableHeaderElement, WebDriver driver) {
         this.tableElement = tableElement;
         this.tableHeaderElement = tableHeaderElement;
