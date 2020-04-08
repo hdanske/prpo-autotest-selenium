@@ -1,7 +1,9 @@
 package prpo;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.openqa.selenium.*;
 
 import java.io.BufferedReader;
@@ -13,13 +15,15 @@ import static files.ImportChargeTrxPage.IMPORT_CHARGE_TRX;
 import static files.LoginPage.LOGIN_URL;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CspTest extends InitTest {
 
+
     @Test
-    public void cspCreate() throws IOException {
+    public void test01_cspCreate() throws IOException {
         loginPage.goTo(LOGIN_URL);
         loginPage.typeUsername("admin");
-        loginPage.typePassword("admin0011");
+        loginPage.typePassword("admin123");
         loginPage.clickLogin();
 
         wait.until(urlToBe(IMPORT_CHARGE_TRX));
@@ -29,7 +33,7 @@ public class CspTest extends InitTest {
 
         cspPage.addCspClick();
         cspAddForm.clickCspType("Индивидуальный предприниматель");
-        cspAddForm.selectCspRegion("Санкт - Петербург");
+        cspAddForm.selectCspRegion("Москва");
         cspAddForm.selectServicesSector("Электроэнергия");
         cspAddForm.typeFullName("ОАО Селениум");
         cspAddForm.typeWorkPhone("+37529990099");
@@ -64,15 +68,15 @@ public class CspTest extends InitTest {
 //-----------------------------Поиск Созданного ПКУ----------------------------------------------------------------------//
         cspPage.typeCspNameInFilter("Селениум");
 
-        cspPage.pause(1);
+        cspPage.pause(2);
         Assert.assertTrue(cspPage.getCspTable().getValueFromCell(1, 1).equals("ОАО Селениум"));
     }
 
     @Test
-    public void cspEdit() throws IOException {
+    public void test02_cspEmptyCreate() throws IOException {
         loginPage.goTo(LOGIN_URL);
         loginPage.typeUsername("admin");
-        loginPage.typePassword("admin0011");
+        loginPage.typePassword("admin123");
         loginPage.clickLogin();
 
         wait.until(urlToBe(IMPORT_CHARGE_TRX));
@@ -80,18 +84,74 @@ public class CspTest extends InitTest {
         sideBar.administrationButtonClick();
         sideBar.cspManageButtonClick();
 
-        cspPage.pause(1);
+        cspPage.pause(2);
         cspPage.typeCspNameInFilter("Селениум");
 
+        cspPage.pause(2);
+        cspPage.getCspTable().getRows().get(0).click();
+
+        cspPage.сopyMapping();
+
+        cspPage.addCspClick();
+        cspAddForm.clickCspType("Юридическое лицо - нерезидент РФ");
+        cspAddForm.selectCspRegion("Алтайский край");
+        cspAddForm.selectServicesSector("Электроэнергия");
+        cspAddForm.selectCspOwner("ОАО Селениум");
+        cspAddForm.typeFullName("ООО Селениум Филиал");
+        cspAddForm.typeWorkPhone("+222222222222");
+        cspAddForm.typeEmail("selenium@yandex.ru");
+        cspAddForm.typeLegalAddres("г. Барнаул, ул. Советская 3");
+        cspAddForm.typeInn("8901252345");
+        cspAddForm.typeKpp("311");
+        cspAddForm.typeOgrn("0012345123456");
+        cspAddForm.typeOkved("056");
+        cspAddForm.typeOkpo("089");
+        cspAddForm.typeOkato("900");
+// -----------------------------Протокол начислений----------------------------------------------------------------------//
+        cspAddForm.selectPanelChargeProtocolMapping();
+        cspAddForm.separatorCheckBoxOnCharges();
+        cspAddForm.typeSeparatorCharge(";");
+        cspAddForm.insertMappingChargesCSV();
+// -----------------------------Факты оплат------------------------------------------------------------------------------//
+        cspAddForm.selectPanelPanelExportMapping();
+        cspAddForm.separatorCheckBoxOnPayment();
+        cspAddForm.typeSeparatorPayment(";");
+        cspAddForm.insertMappingPaymentsCSV();
+//-----------------------------Сохранение ПКУ----------------------------------------------------------------------------//
+        cspAddForm.clickSaveCSP();
+//-----------------------------Поиск Созданного ПКУ----------------------------------------------------------------------//
+        cspPage.typeCspNameInFilter("Селениум Филиал");
+
         cspPage.pause(1);
+        Assert.assertTrue(cspPage.getCspTable().getValueFromCell(1, 1).equals("ООО Селениум Филиал"));
+    }
+
+
+    @Test
+    public void test03_cspEdit() throws IOException {
+        loginPage.goTo(LOGIN_URL);
+        loginPage.typeUsername("admin");
+        loginPage.typePassword("admin123");
+        loginPage.clickLogin();
+
+        wait.until(urlToBe(IMPORT_CHARGE_TRX));
+
+        sideBar.administrationButtonClick();
+        sideBar.cspManageButtonClick();
+
+        cspPage.pause(2);
+        cspPage.typeCspNameInFilter("Селениум");
+
+        cspPage.pause(2);
         cspPage.getCspTable().getRows().get(0).click();
 
         cspPage.editButtonClick();
 
         cspAddForm.clickCspType("Юридическое лицо");
-        cspAddForm.selectCspRegion("Республика Крым");
+        cspAddForm.selectCspRegion("Алтайский край");
         cspAddForm.selectServicesSector("Детский сад");
         cspAddForm.typeFullName("ООО Вебдрайвер");
+        cspAddForm.typeShortName("ООО Вебдрайвер");
         cspAddForm.typeWorkPhone("+111111111111");
         cspAddForm.typeEmail("webdriver@yandex.ru");
         cspAddForm.typeLegalAddres("г. Севастополь, ул. Советская 3");
@@ -111,14 +171,49 @@ public class CspTest extends InitTest {
 
         cspAddForm.selectPanelPanelExportMapping();
         cspAddForm.resetPaymentsCSV();
-        //cspAddForm.deletePaymentField(3);
+        cspAddForm.deletePaymentField(3);
 
         cspAddForm.clickSaveCSP();
 
-        Assert.assertTrue(cspPage.mappingAlertMessage("Редактирование поставщика коммерческих услуг ''ООО Вебдрайвер'' прошло успешно"));
+        Assert.assertTrue(cspPage.mappingAlertMessage("Поставщик коммерческих услуг успешно отредактирован"));
 
-        cspAddForm.pause(15);
+        cspPage.typeCspNameInFilter("Вебдрайвер");
+
+        cspPage.pause(1);
+        Assert.assertTrue(cspPage.getCspTable().getValueFromCell(1, 1).equals("ООО Вебдрайвер"));
     }
+
+    @Test
+    public void test04_deleteCSP() throws IOException {
+        loginPage.goTo(LOGIN_URL);
+        loginPage.typeUsername("admin");
+        loginPage.typePassword("admin123");
+        loginPage.clickLogin();
+
+        wait.until(urlToBe(IMPORT_CHARGE_TRX));
+
+        sideBar.administrationButtonClick();
+        sideBar.cspManageButtonClick();
+
+        cspPage.pause(2);
+        cspPage.typeCspNameInFilter("Вебдрайвер");
+
+        cspPage.pause(2);
+        cspPage.getCspTable().getRows().get(0).click();
+
+        cspPage.deleteCspButtonClick();
+        cspPage.confirmDeleteButtonClick();
+
+        Assert.assertTrue(cspPage.mappingAlertMessage("Удаление поставщика коммерческих услуг прошло успешно"));
+        cspAddForm.toastCloseClick();
+
+        cspPage.typeCspNameInFilter("Вебдрайвер");
+
+        cspPage.pause(1);
+        //Assert.assertFalse(cspPage.getCspTable().getValueFromCell(1, 1).equals("ООО Вебдрайвер"));
+    }
+
+
 
 
     public static void dragAndDrop(WebElement elementFrom, WebElement elementTo) throws IOException {

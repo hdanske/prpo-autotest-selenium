@@ -9,6 +9,7 @@ import java.util.List;
 public class CspAddForm extends BaseEntity {
     private WebDriver driver;
 
+
     public CspAddForm(WebDriver driver) {
         this.driver = driver;
     }
@@ -62,7 +63,10 @@ public class CspAddForm extends BaseEntity {
     private By deleteFiledCharge = By.cssSelector("p-spinner .ui-spinner-down");
     private By addFieldPayment = By.xpath("//*[@id=\"ui-tabpanel-2\"]//p-spinner//button");
     private By resetButtonCSV = By.xpath("//button[@data-cy-csp-mapping-reset]");
-    private By resetButtonPaymentsCSV = By.xpath("//#ui-tabpanel-2//button[@data-cy-csp-mapping-reset]");
+    private By resetButtonPaymentsCSV = By.xpath("//*[@id='ui-tabpanel-2']//button[@data-cy-csp-mapping-reset]");
+    private By deleteFieldPayment = By.xpath("//*[@id='ui-tabpanel-2']//p-spinner//button[2]");
+    private By insertMappingChargesCSV = By.xpath("//button[@data-cy-csp-mapping-paste-template]");
+    private By insertMappingPaymentsCSV = By.xpath("//*[@id='ui-tabpanel-2']//button[@data-cy-csp-mapping-paste-template]");
 
 //    private By innerProtocolFieldArr = By.cssSelector("//*[data-cy-csp-mapping-internal][1]");
 
@@ -112,6 +116,7 @@ public class CspAddForm extends BaseEntity {
     }
 
     public void typeShortName(String shortName) {
+        driver.findElement(cspShortName).clear();
         driver.findElement(cspShortName).sendKeys(shortName);
     }
 
@@ -282,5 +287,24 @@ public class CspAddForm extends BaseEntity {
 
     public void resetPaymentsCSV() {
         driver.findElement(resetButtonPaymentsCSV).click();
+    }
+
+    public void deletePaymentField(int quantity) {
+        while (quantity > 0) {
+            driver.findElement(deleteFieldPayment).click();
+            quantity--;
+        }
+    }
+
+    public void selectParentCSP(String оао_селениум) {
+
+    }
+
+    public void insertMappingChargesCSV() {
+        driver.findElement(insertMappingChargesCSV).click();
+    }
+
+    public void insertMappingPaymentsCSV() {
+        driver.findElement(insertMappingPaymentsCSV).click();
     }
 }

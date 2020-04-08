@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 public class CspPage extends BaseEntity {
     private WebDriver driver;
     private Table cspTable;
-    public static String CSP_URL = "https://prpo-test.intervale.ru/console/csp";
+    public static String CSP_URL = "https://prpo-dev.intervale.ru/console/csp";
 
     public CspPage(WebDriver driver) {
         this.driver = driver;
@@ -21,7 +21,7 @@ public class CspPage extends BaseEntity {
     //    private By lineAfterFilter = By.xpath("//span[contains(text(),'AutotestCSP_noTitle')]");
     private By lineAfterFilter2 = By.xpath("//tr[@class='ui-cut-overflow ng-star-inserted']");
 
-//    private By filterFieldSchortName = By.xpath("//th[1]//div[1]//div[1]//input[1]");
+    //    private By filterFieldSchortName = By.xpath("//th[1]//div[1]//div[1]//input[1]");
     private By filterFieldSchortName = By.xpath("//table[@class='ui-treetable-scrollable-header-table']//th[1]//input");
 
     private By sortByFieldName = By.xpath("//th[contains(text(), ' Сокращенное наименование ')]");
@@ -31,6 +31,7 @@ public class CspPage extends BaseEntity {
 
     private By tableHeader = By.xpath("//table[@class='ui-treetable-scrollable-header-table']");
     private By tableValye = By.xpath("//div[@class='ui-treetable-scrollable-body']/table");
+    private By copyMappingButton = By.xpath("//button/span[contains(text(), 'Копировать маппинг ПКУ')]");
 
     private By tableSettings = By.cssSelector("[ptooltip=\"Настройки таблицы\"]");
     private By clearAllFilter = By.linkText("Сбросить все фильтры");
@@ -42,14 +43,14 @@ public class CspPage extends BaseEntity {
         return driver.findElement(cspLine);
     }
 
-    public WebElement deleteCspButton() {
-        return driver.findElement(buttonDelete);
+    public void deleteCspButtonClick() {
+        driver.findElement(buttonDelete).click();
     }
 
-    public WebElement confirmDeleteButton() {
+    public void confirmDeleteButtonClick() {
         By confirmButton = By.xpath("//button//*[contains(text(), 'Да')]");
 //        driver.findElement(confirmButton).doubleCl
-        return driver.findElement(confirmButton);
+        driver.findElement(confirmButton).click();
     }
 
 
@@ -71,6 +72,7 @@ public class CspPage extends BaseEntity {
     }
 
     public void typeCspNameInFilter(String name) {
+        driver.findElement(filterFieldSchortName).clear();
         driver.findElement(filterFieldSchortName).sendKeys(name);
     }
 
@@ -134,4 +136,7 @@ public class CspPage extends BaseEntity {
     }
 
 
+    public void сopyMapping() {
+        driver.findElement(copyMappingButton).click();
+    }
 }

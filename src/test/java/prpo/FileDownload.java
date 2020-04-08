@@ -17,7 +17,7 @@ public class FileDownload extends InitTest {
     public void downloadPaymentFile() {
         loginPage.goTo(LOGIN_URL);
         loginPage.typeUsername("admin");
-        loginPage.typePassword("admin0011");
+        loginPage.typePassword("admin123");
         loginPage.clickLogin();
 
         wait.until(urlToBe(IMPORT_CHARGE_TRX));

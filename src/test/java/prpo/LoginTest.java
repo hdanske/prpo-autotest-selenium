@@ -37,7 +37,7 @@ public class LoginTest extends InitTest {
 
         loginPage.goTo(LOGIN_URL);
         loginPage.typeUsername("admin");
-        loginPage.typePassword("admin0011");
+        loginPage.typePassword("admin123");
         loginPage.clickLogin();
 
         wait.until(urlToBe(IMPORT_CHARGE_TRX));
