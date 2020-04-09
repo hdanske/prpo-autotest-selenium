@@ -8,8 +8,10 @@ import java.util.List;
 
 public class SideBar {
     private WebDriver driver;
+
     private By sideBarButtons = By.cssSelector("a.tabmenuitem-link");
     private By cspManageButton = By.xpath("//*[text() = 'Поставщики коммерческих услуг']");
+    private By regionManageButton = By.xpath("//*[text() = 'Регионы']");
     private By importChargesButton = By.xpath("//*[text() = 'Импорт начислений']");
     private By exportPayment = By.xpath("//*[text() = 'Экспорт платежей']");
 
@@ -58,4 +60,7 @@ public class SideBar {
     }
 
 
+    public void regionManageButtonClick() {
+        driver.findElement(regionManageButton).click();
+    }
 }

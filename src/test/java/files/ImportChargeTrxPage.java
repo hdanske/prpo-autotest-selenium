@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class ImportChargeTrxPage extends BaseEntity{
-    public static String IMPORT_CHARGE_TRX = "https://prpo-dev.intervale.ru/console/import-charges-trx";
+    public static String IMPORT_CHARGE_TRX = "https://prpo-test.intervale.ru/console/import-charges-trx";
 
     private WebDriver driver;
     private Table importChargesTable;

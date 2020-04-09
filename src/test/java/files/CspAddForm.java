@@ -1,10 +1,12 @@
 package files;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+//import java.util.NoSuchElementException;
 
 public class CspAddForm extends BaseEntity {
     private WebDriver driver;
@@ -22,8 +24,10 @@ public class CspAddForm extends BaseEntity {
         return driver.findElement(cspOgrn);
     }
 
+    private By inputNarrowCSV = By.xpath("//p-accordiontab[@header='CSV']//input[@formcontrolname='narrativeMask'][1]");
+    private By inputErrorMessage = By.cssSelector("span.ui-message.ui-messages-error span");
+    private By cspAddFormWindow = By.cssSelector("div[role='dialog']");
     private By cspTypeDropDown = By.xpath("//p-dropdown[@formcontrolname='cspType']");
-
     private By cspServiceSector = By.xpath("//p-dropdown[@formcontrolname='servicesSector']");
     private By cspOwnerList = By.xpath("//*[@formcontrolname='owner']//button");
     private By cspRegionList = By.xpath("//*[@formcontrolname='region']//button");
@@ -300,11 +304,37 @@ public class CspAddForm extends BaseEntity {
 
     }
 
+    public boolean addCspFormIsPresent(){
+        try {
+            driver.findElement(cspAddFormWindow);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
     public void insertMappingChargesCSV() {
         driver.findElement(insertMappingChargesCSV).click();
     }
 
     public void insertMappingPaymentsCSV() {
         driver.findElement(insertMappingPaymentsCSV).click();
+    }
+
+    public List<WebElement> errorMessages(String errorMessage) {
+        List<WebElement> elements = driver.findElements(inputErrorMessage);
+        for (WebElement el:
+             elements) {
+            if (!(el.getText().equals(errorMessage))) elements.remove(el);
+        }
+        return elements;
+    }
+
+    public void clickCancel() {
+        driver.findElement(buttonCancel).click();
+    }
+
+    public WebElement getNarrowField() {
+        return driver.findElement(inputNarrowCSV);
     }
 }

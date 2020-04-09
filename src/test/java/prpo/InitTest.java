@@ -22,6 +22,8 @@ public class InitTest {
     public static ImportChargeForm importChargeForm;
     public static ExportPaymentsPage exportPaymentsPage;
     public static ExportPaymentForm exportPaymentForm;
+    public static RegionPage regionPage;
+    public static RegionForm regionForm;
 
     @Before
     public void start() {
@@ -41,6 +43,8 @@ public class InitTest {
         importChargeForm = new ImportChargeForm(driver);
         exportPaymentsPage = new ExportPaymentsPage(driver);
         exportPaymentForm = new ExportPaymentForm(driver);
+        regionPage = new RegionPage(driver);
+        regionForm = new RegionForm(driver);
 
         js = (JavascriptExecutor) driver;
 

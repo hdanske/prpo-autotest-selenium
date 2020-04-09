@@ -9,7 +9,7 @@ import java.util.List;
 
 public class LoginPage {
     private WebDriver driver;
-    public static String LOGIN_URL = "https://prpo-dev.intervale.ru/console/";
+    public static String LOGIN_URL = "https://prpo-test.intervale.ru/console/";
     public static String USERNAME = "username";
     public static String PASSWORD = "password";
     public static String LOGINBUTTON = "button";

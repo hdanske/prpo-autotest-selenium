@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import static files.CspPage.CSP_URL;
 import static files.ImportChargeTrxPage.IMPORT_CHARGE_TRX;
 import static files.LoginPage.LOGIN_URL;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
@@ -23,13 +22,23 @@ public class CspTest extends InitTest {
     public void test01_cspCreate() throws IOException {
         loginPage.goTo(LOGIN_URL);
         loginPage.typeUsername("admin");
-        loginPage.typePassword("admin123");
+        loginPage.typePassword("admin0011");
         loginPage.clickLogin();
 
         wait.until(urlToBe(IMPORT_CHARGE_TRX));
 
         sideBar.administrationButtonClick();
         sideBar.cspManageButtonClick();
+
+        cspPage.addCspClick();
+        Assert.assertTrue(cspAddForm.addCspFormIsPresent());
+
+        cspAddForm.clickSaveCSP();
+        Assert.assertTrue(cspAddForm.errorMessages("Данное поле обязательно").size() == 13);
+        cspAddForm.clickCancel();
+
+        cspPage.pause(1);
+        Assert.assertFalse(cspAddForm.addCspFormIsPresent());
 
         cspPage.addCspClick();
         cspAddForm.clickCspType("Индивидуальный предприниматель");
@@ -53,6 +62,8 @@ public class CspTest extends InitTest {
         dragAndDrop(cspAddForm.getChargeField("totalAmount"), cspAddForm.getfieldToMapp(3));
         dragAndDrop(cspAddForm.getChargeField("asppNumber"), cspAddForm.getfieldToMapp(4));
         dragAndDrop(cspAddForm.getChargeField("paidPeriod"), cspAddForm.getfieldToMapp(5));
+        dragAndDrop(cspAddForm.getChargeField("payerFullName"), cspAddForm.getNarrowField());
+
         cspAddForm.separatorCheckBoxOnCharges();
         cspAddForm.typeSeparatorCharge(";");
 // -----------------------------Факты оплат------------------------------------------------------------------------------//
@@ -65,6 +76,7 @@ public class CspTest extends InitTest {
         cspAddForm.typeSeparatorPayment(";");
 //-----------------------------Сохранение ПКУ----------------------------------------------------------------------------//
         cspAddForm.clickSaveCSP();
+        Assert.assertTrue(cspPage.mappingAlertMessage("Регистрация ПКУ прошла успешно"));
 //-----------------------------Поиск Созданного ПКУ----------------------------------------------------------------------//
         cspPage.typeCspNameInFilter("Селениум");
 
@@ -72,11 +84,14 @@ public class CspTest extends InitTest {
         Assert.assertTrue(cspPage.getCspTable().getValueFromCell(1, 1).equals("ОАО Селениум"));
     }
 
+
+//    span.ui-message.ui-messages-error span
+
     @Test
     public void test02_cspEmptyCreate() throws IOException {
         loginPage.goTo(LOGIN_URL);
         loginPage.typeUsername("admin");
-        loginPage.typePassword("admin123");
+        loginPage.typePassword("admin0011");
         loginPage.clickLogin();
 
         wait.until(urlToBe(IMPORT_CHARGE_TRX));
@@ -131,7 +146,7 @@ public class CspTest extends InitTest {
     public void test03_cspEdit() throws IOException {
         loginPage.goTo(LOGIN_URL);
         loginPage.typeUsername("admin");
-        loginPage.typePassword("admin123");
+        loginPage.typePassword("admin0011");
         loginPage.clickLogin();
 
         wait.until(urlToBe(IMPORT_CHARGE_TRX));
@@ -187,7 +202,7 @@ public class CspTest extends InitTest {
     public void test04_deleteCSP() throws IOException {
         loginPage.goTo(LOGIN_URL);
         loginPage.typeUsername("admin");
-        loginPage.typePassword("admin123");
+        loginPage.typePassword("admin0011");
         loginPage.clickLogin();
 
         wait.until(urlToBe(IMPORT_CHARGE_TRX));
@@ -212,8 +227,6 @@ public class CspTest extends InitTest {
         cspPage.pause(1);
         //Assert.assertFalse(cspPage.getCspTable().getValueFromCell(1, 1).equals("ООО Вебдрайвер"));
     }
-
-
 
 
     public static void dragAndDrop(WebElement elementFrom, WebElement elementTo) throws IOException {

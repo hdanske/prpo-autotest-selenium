@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 public class CspPage extends BaseEntity {
     private WebDriver driver;
     private Table cspTable;
-    public static String CSP_URL = "https://prpo-dev.intervale.ru/console/csp";
+    public static String CSP_URL = "https://prpo-test.intervale.ru/console/csp";
 
     public CspPage(WebDriver driver) {
         this.driver = driver;
